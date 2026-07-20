@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day 4: Dev Card Generator</title>
+  <style>
+    /* Clean, practical styling without AI fluff */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+      margin: 0;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #38bdf8;
+      font-size: 1.5em;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 10px;
+    }
+
+    /* Form styling */
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.9em;
+      color: #cbd5e1;
+    }
+
+    /* User requested: typed info appears in grey font */
+    input[type="text"],
+    input[type="email"],
+    select {
+      width: 100%;
+      padding: 10px;
+      background-color: #0b0f19;
+      border: 1px solid #475569;
+      border-radius: 4px;
+      box-sizing: border-box;
+      color: #94a3b8; /* Cool grey text for user input */
+      font-size: 0.95em;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #38bdf8;
+    }
+
+    .radio-options {
+      display: flex;
+      gap: 20px;
+      margin-top: 5px;
+    }
+
+    .radio-options label {
+      cursor: pointer;
+      color: #94a3b8;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #0ea5e9;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #0284c7;
+    }
+
+    button.secondary {
+      background-color: #334155;
+      margin-top: 15px;
+    }
+
+    button.secondary:hover {
+      background-color: #475569;
+    }
+
+    /* Badge Output (Hidden initially) */
+    #badge-section {
+      display: none; /* Hidden until form is submitted */
+      text-align: center;
+    }
+
+    .card {
+      background: #0f172a;
+      border: 2px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 25px;
+      margin-top: 15px;
+      text-align: left;
+    }
+
+    .card-header {
+      font-size: 0.75em;
+      color: #0ea5e9;
+      letter-spacing: 1.5px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      font-size: 1.6em;
+      margin: 0 0 5px 0;
+      color: #ffffff;
+    }
+
+    .track-tag {
+      display: inline-block;
+      background: #1e293b;
+      color: #38bdf8;
+      border: 1px solid #334155;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.8em;
+      margin-bottom: 15px;
+    }
+
+    .card-details {
+      font-size: 0.9em;
+      color: #94a3b8;
+      margin: 4px 0;
+    }
+
+    .footer-note {
+      font-size: 0.8em;
+      color: #64748b;
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Section 1: The Input Form -->
+    <div id="form-section">
+      <h2>Conference Badge Generator</h2>
+      
+      <form id="devForm">
+        <div class="field">
+          <label for="username">Full Name</label>
+          <input type="text" id="username" placeholder="e.g. Rahul Sharma" required>
+        </div>
+
+        <div class="field">
+          <label for="useremail">Email Address</label>
+          <input type="email" id="useremail" placeholder="rahul@example.com" required>
+        </div>
+
+        <div class="field">
+          <label for="track">Primary Track</label>
+          <select id="track">
+            <option value="Frontend Development">Frontend Development</option>
+            <option value="Backend / Python">Backend / Python</option>
+            <option value="AI & Machine Learning">AI & Machine Learning</option>
+            <option value="Open Source Contributor">Open Source Contributor</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Attendance Mode</label>
+          <div class="radio-options">
+            <label><input type="radio" name="mode" value="In-Person Pass" checked> In-Person</label>
+            <label><input type="radio" name="mode" value="Remote Pass"> Remote</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>
+            <input type="checkbox" id="swag"> Include welcome kit & swag bag
+          </label>
+        </div>
+
+        <button type="submit">Generate Dev Card</button>
+      </form>
+    </div>
+
+    <!-- Section 2: The Generated Badge (Hidden until generated) -->
+    <div id="badge-section">
+      <h2>Your Badge is Ready!</h2>
+      
+      <div class="card">
+        <div class="card-header">DEVMEET 2026 • CONFIRMED</div>
+        <h3 id="out-name">Name</h3>
+        <div class="track-tag" id="out-track">Track</div>
+        <p class="card-details" id="out-email">Email</p>
+        <p class="card-details" id="out-mode">Mode</p>
+        <p class="card-details" id="out-swag">Swag</p>
+      </div>
+
+      <button class="secondary" id="resetBtn">Create Another Badge</button>
+      <p class="footer-note">Right-click the card to save or screenshot for your GitHub!</p>
+    </div>
+
+  </div>
+
+  <script>
+    // Grab DOM elements for form and UI switching
+    const formSection = document.getElementById('form-section');
+    const badgeSection = document.getElementById('badge-section');
+    const form = document.getElementById('devForm');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // Handle form submission
+    form.addEventListener('submit', function(event) {
+      // 1. Prevent browser from refreshing the page
+      event.preventDefault();
+
+      // 2. Read the values the user typed
+      const nameVal = document.getElementById('username').value;
+      const emailVal = document.getElementById('useremail').value;
+      const trackVal = document.getElementById('track').value;
+      const swagVal = document.getElementById('swag').checked;
+      
+      // Get the checked radio button value
+      const modeVal = document.querySelector('input[name="mode"]:checked').value;
+
+      // 3. Inject those values into the badge HTML
+      document.getElementById('out-name').textContent = nameVal;
+      document.getElementById('out-email').textContent = "📧 " + emailVal;
+      document.getElementById('out-track').textContent = trackVal;
+      document.getElementById('out-mode').textContent = "🎟️ Mode: " + modeVal;
+      
+      if (swagVal) {
+        document.getElementById('out-swag').textContent = "🎁 Swag Bag: Requested";
+      } else {
+        document.getElementById('out-swag').textContent = "🎁 Swag Bag: Opted Out";
+      }
+
+      // 4. Hide the form and reveal the generated badge
+      formSection.style.display = 'none';
+      badgeSection.style.display = 'block';
+    });
+
+    // Reset button logic to go back to the form
+    resetBtn.addEventListener('click', function() {
+      form.reset(); // Clears previous inputs
+      badgeSection.style.display = 'none';
+      formSection.style.display = 'block';
+    });
+  </script>
+
+</body>
+</html>
